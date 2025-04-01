@@ -22,7 +22,7 @@ Criação de Blog para desafio da Baitz
 
 ## Como rodar o projeto?
 
-Após clocar o repositório, siga os passos abaixo:
+Após clonar o repositório, siga os passos abaixo:
 
 ```bash
   npm i

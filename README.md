@@ -2,6 +2,8 @@
 # Desafio Blog (Baitz)
 
 Criação de Blog para desafio da Baitz
+<br/><br/>
+![App Screenshot](/public/print.PNG)
 
 
 ## Tecnologias Utilizadas
@@ -50,3 +52,7 @@ Ao baixar as dependências preencha o .ENV do projeto
 ```bash
     http://localhost:3000
  ```
+
+## Demonstração
+
+

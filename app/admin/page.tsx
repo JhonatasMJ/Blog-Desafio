@@ -25,19 +25,14 @@ import { AnimatedCard } from "@/components/ui/animated-card"
 import { PageTransition } from "@/components/ui/page-transition"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
-
-interface Post {
-  id: string
-  title: string
-  category: string
-  date: string
-  imageUrl: string
-}
+import type { Post } from "../types/AdminTypes"
 
 export default function AdminPage() {
   const [posts, setPosts] = useState<Post[]>([])
   const [loading, setLoading] = useState(true)
   const [postToDelete, setPostToDelete] = useState<string | null>(null)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [postsPerPage] = useState(6)
 
   useEffect(() => {
     const postsRef = ref(database, "posts")
@@ -73,14 +68,16 @@ export default function AdminPage() {
     }
   }
 
+  const indexOfLastPost = currentPage * postsPerPage
+  const indexOfFirstPost = indexOfLastPost - postsPerPage
+  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost)
+
   return (
     <AdminCheck>
       <PageTransition>
         <div className="flex min-h-screen flex-col bg-white">
-          {/* Header */}
-         <Header/>
+          <Header />
 
-          {/* Back Button */}
           <div className="container mt-8 mx-auto max-w-7xl">
             <AnimatedButton
               variant="ghost"
@@ -95,7 +92,6 @@ export default function AdminPage() {
             </AnimatedButton>
           </div>
 
-       
           <div className="container py-8 max-w-7xl px-4 md:px-6 mx-auto ">
             <h1 className="text-3xl font-bold tracking-tighter text-primary">Gerenciar Posts</h1>
             <p className="text-slate-600">Crie, edite e exclua posts do blog</p>
@@ -120,27 +116,27 @@ export default function AdminPage() {
               </div>
             ) : (
               <div className="grid gap-6">
-                {posts.map((post, index) => (
+                {currentPosts.map((post, index) => (
                   <AnimatedCard key={post.id} delay={index} className="border border-slate-200 overflow-hidden">
                     <div className="flex flex-col md:flex-row">
-                      <div className="w-full flex md:w-48 h-48 overflow-hidden ">
+                      <div className="w-full md:w-48 h-48 overflow-hidden flex-shrink-0">
                         <img
-                          src={post.imageUrl || "/placeholder.svg?height=200&width=200"}
+                          src={post.imageUrl || "/placeholder.svg?height=200&width=200" || "/placeholder.svg"}
                           alt={post.title}
                           className="h-full w-full object-cover transition-transform hover:scale-[1.02] duration-300"
                         />
                       </div>
                       <div className="flex flex-col flex-1 p-4 ">
-                            <span className="text-sm text-slate-500">{post.date}</span>
+                        <span className="text-sm text-slate-500">{post.date}</span>
                         <CardHeader>
-                          <div className="flex items-center gap-2 mb-2">
+                          <div className="flex items-center gap-2 mb-2 py-2">
                             <Badge variant="secondary" className="bg-primary/10 text-primary hover:bg-primary/20">
-                              {post.category}
+                              {post.category}py-4
                             </Badge>
                           </div>
                           <CardTitle className="text-primary">{post.title}</CardTitle>
                         </CardHeader>
-                        <CardContent className="flex-1">
+                        <CardContent className="flex-1 mt-2">
                           <Link href={`/articles/${post.id}`} className="text-sm text-primary hover:underline">
                             Ver Post
                           </Link>
@@ -184,10 +180,45 @@ export default function AdminPage() {
                 ))}
               </div>
             )}
+
+            {posts.length > postsPerPage && (
+              <div className="flex justify-center mt-6 gap-2">
+                <AnimatedButton
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                >
+                  Anterior
+                </AnimatedButton>
+
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: Math.ceil(posts.length / postsPerPage) }).map((_, index) => (
+                    <AnimatedButton
+                      key={index}
+                      variant={currentPage === index + 1 ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setCurrentPage(index + 1)}
+                      className="w-8 h-8 p-0"
+                    >
+                      {index + 1}
+                    </AnimatedButton>
+                  ))}
+                </div>
+
+                <AnimatedButton
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setCurrentPage((prev) => Math.min(prev + 1, Math.ceil(posts.length / postsPerPage)))}
+                  disabled={currentPage === Math.ceil(posts.length / postsPerPage)}
+                >
+                  Próxima
+                </AnimatedButton>
+              </div>
+            )}
           </div>
 
-          {/* Footer */}
-       <Footer/>
+          <Footer />
         </div>
       </PageTransition>
     </AdminCheck>

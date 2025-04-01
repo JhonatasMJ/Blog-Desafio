@@ -143,8 +143,8 @@ export default function ArticlePage({ params }: { params: { id: string } }) {
 
         <Separator className="my-12" />
 
-       <Footer/>
       </div>
+       <Footer/>
        
     </PageTransition>
   )

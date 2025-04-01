@@ -15,6 +15,8 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import Footer from "@/components/footer"
+import Header from "@/components/header"
 
 interface Post {
   title: string
@@ -77,7 +79,7 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
     }
 
     try {
-      // Update post data
+
       const postData = {
         title,
         content,
@@ -86,11 +88,11 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
         excerpt: content.substring(0, 150) + (content.length > 150 ? "..." : ""),
       }
 
-      // Update post in database
+
       const postRef = ref(database, `posts/${params.id}`)
       await update(postRef, postData)
 
-      // Redirect to the post
+ 
       router.push(`/articles/${params.id}`)
     } catch (error: any) {
       console.error("Error updating post:", error)
@@ -110,18 +112,11 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
   return (
     <AdminCheck>
       <div className="flex min-h-screen flex-col bg-white">
-        {/* Header */}
-        <header className="sticky top-0 z-50 w-full border-b bg-white shadow-sm">
-          <div className="container flex h-16 items-center justify-between">
-            <Link href="/" className="flex items-center gap-2 font-bold text-xl text-primary">
-              <Car className="h-6 w-6" />
-              <span>Blog de Carros</span>
-            </Link>
-          </div>
-        </header>
+        
+    <Header />
 
-        {/* Back Button */}
-        <div className="container mt-8">
+       
+        <div className="container mt-8 max-w-7xl mx-auto">
           <Button variant="ghost" size="sm" asChild className="text-primary hover:bg-primary/10 hover:text-primary">
             <Link href="/admin" className="flex items-center">
               <ArrowLeft className="mr-2 h-4 w-4" />
@@ -130,9 +125,8 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
           </Button>
         </div>
 
-        {/* Edit Post Form */}
-        <div className="container py-8 max-w-3xl">
-          <Card className="border border-slate-200 shadow-sm">
+        <div className="container py-8 max-w-7xl mx-auto">
+          <Card className="border border-slate-200 shadow-sm p-6">
             <CardHeader>
               <CardTitle className="text-primary">Editar Post</CardTitle>
             </CardHeader>
@@ -209,7 +203,7 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
                 </div>
               </CardContent>
 
-              <CardFooter className="flex justify-between">
+              <CardFooter className="flex justify-between py-4">
                 <Button
                   type="button"
                   variant="outline"
@@ -234,20 +228,7 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
           </Card>
         </div>
 
-        {/* Footer */}
-        <footer className="w-full border-t bg-slate-50 py-6 md:py-12 mt-auto">
-          <div className="container px-4 md:px-6">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-              <div className="flex items-center gap-2">
-                <Car className="h-6 w-6 text-primary" />
-                <span className="font-bold text-primary">Blog de Carros</span>
-              </div>
-              <p className="text-sm text-slate-500 text-center md:text-right">
-                © {new Date().getFullYear()} Blog de Carros. Todos os direitos reservados.
-              </p>
-            </div>
-          </div>
-        </footer>
+                  <Footer />
       </div>
     </AdminCheck>
   )

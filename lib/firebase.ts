@@ -1,10 +1,7 @@
 import { initializeApp } from "firebase/app"
 import { getAuth } from "firebase/auth"
 import { getDatabase } from "firebase/database"
-// Remover esta linha:
-// import { getStorage } from "firebase/storage";
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCnSFD56Go7yUZFMIvgeISQblLIY-FJ1-w",
   authDomain: "blog-ecaae.firebaseapp.com",
@@ -15,14 +12,13 @@ const firebaseConfig = {
   measurementId: "G-0PR8CP5LCJ",
 }
 
-// Initialize Firebase
+
 const app = initializeApp(firebaseConfig)
 
-// Initialize Firebase services
+
 export const auth = getAuth(app)
 export const database = getDatabase(app)
-// Remover esta linha:
-// export const storage = getStorage(app);
+
 
 export default app
 

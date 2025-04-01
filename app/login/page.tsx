@@ -1,28 +1,49 @@
 "use client"
 
-import type React from "react"
-
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { Car } from "lucide-react"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { Car, Eye, EyeOff } from 'lucide-react'
+import { z } from "zod"
+
 import { useAuth } from "@/components/auth-provider"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { AnimatedButton } from "@/components/ui/animated-button"
 import { PageTransition } from "@/components/ui/page-transition"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+
+const loginSchema = z.object({
+  email: z.string().email({ message: "Email inválido" }),
+  password: z.string().min(6, { message: "A senha deve ter pelo menos 6 caracteres" }),
+})
+
+type LoginFormValues = z.infer<typeof loginSchema>
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-  const { signIn, signUp, user } = useAuth()
+  const [showPassword, setShowPassword] = useState(false)
+  const { signIn, user } = useAuth()
   const router = useRouter()
+
+  const form = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  })
 
   // If user is already logged in, redirect to home
   if (user) {
@@ -30,13 +51,12 @@ export default function LoginPage() {
     return null
   }
 
-  const handleSignIn = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const onSubmit = async (data: LoginFormValues) => {
     setError("")
     setIsLoading(true)
 
     try {
-      await signIn(email, password)
+      await signIn(data.email, data.password)
       router.push("/")
     } catch (error: any) {
       setError(error.message || "Falha ao entrar")
@@ -45,138 +65,119 @@ export default function LoginPage() {
     }
   }
 
-  const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError("")
-    setIsLoading(true)
-
-    try {
-      await signUp(email, password)
-      router.push("/")
-    } catch (error: any) {
-      setError(error.message || "Falha ao criar conta")
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
   return (
     <PageTransition>
-      <div className="flex min-h-screen flex-col items-center justify-center bg-slate-50 p-4">
-        <Link href="/" className="flex items-center gap-2 font-bold text-2xl mb-8 text-primary">
-          <Car className="h-8 w-8" />
-          <span>Blog de Carros</span>
-        </Link>
+      <div className="flex min-h-screen flex-col md:flex-row">
+        {/* Form Side */}
+        <div className="flex w-full flex-col justify-center px-4 py-12 md:w-1/2 md:px-12 lg:px-16 xl:px-24">
+          <div className="mx-auto w-full max-w-md">
+            <div className="flex items-center gap-2 mb-8">
+              <Car className="h-8 w-8 text-primary" />
+              <span className="text-2xl font-bold text-primary">Blog de Carros</span>
+            </div>
+            
+            <div className="mb-8">
+              <h1 className="text-3xl font-bold tracking-tight text-gray-900">Entrar na sua conta</h1>
+              <p className="mt-2 text-sm text-gray-600">
+                Não tem uma conta?{" "}
+                <Link href="/register" className="font-medium text-primary hover:underline">
+                  Cadastre-se
+                </Link>
+              </p>
+            </div>
 
-        <div className="w-full max-w-md">
-          <Tabs defaultValue="signin" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="signin">Entrar</TabsTrigger>
-              <TabsTrigger value="signup">Cadastrar</TabsTrigger>
-            </TabsList>
+            {error && (
+              <Alert variant="destructive" className="mb-6">
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
 
-            <TabsContent value="signin">
-              <Card className="border-slate-200 shadow-md">
-                <CardHeader>
-                  <CardTitle className="text-primary">Entrar</CardTitle>
-                  <CardDescription>Digite suas credenciais para acessar sua conta</CardDescription>
-                </CardHeader>
-                <form onSubmit={handleSignIn}>
-                  <CardContent className="space-y-4">
-                    {error && (
-                      <Alert variant="destructive">
-                        <AlertDescription>{error}</AlertDescription>
-                      </Alert>
-                    )}
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        placeholder="nome@exemplo.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                        className="border-slate-200 focus:border-primary"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="password">Senha</Label>
-                      <Input
-                        id="password"
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                        className="border-slate-200 focus:border-primary"
-                      />
-                    </div>
-                  </CardContent>
-                  <CardFooter>
-                    <AnimatedButton type="submit" className="w-full transition-all" disabled={isLoading}>
-                      {isLoading ? "Entrando..." : "Entrar"}
-                    </AnimatedButton>
-                  </CardFooter>
-                </form>
-              </Card>
-            </TabsContent>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input 
+                          placeholder="admin@admin.com" 
+                          type="email" 
+                          {...field} 
+                          className="border-slate-200 focus:border-primary"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Senha</FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Input 
+                            type={showPassword ? "text" : "password"} 
+                            {...field} 
+                            className="border-slate-200 focus:border-primary pr-10"
+                            placeholder="fatec#Baitz123"
+                          />
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="absolute right-0 top-0 h-full px-3"
+                            onClick={() => setShowPassword(!showPassword)}
+                          >
+                            {showPassword ? (
+                              <EyeOff className="h-4 w-4 text-gray-500" />
+                            ) : (
+                              <Eye className="h-4 w-4 text-gray-500" />
+                            )}
+                            <span className="sr-only">
+                              {showPassword ? "Esconder senha" : "Mostrar senha"}
+                            </span>
+                          </Button>
+                        </div>
+                      </FormControl>
+                      <div className="flex items-center justify-between mt-2">
+                        <FormMessage />
+                            
+                      </div>
+                    </FormItem>
+                  )}
+                />
 
-            <TabsContent value="signup">
-              <Card className="border-slate-200 shadow-md">
-                <CardHeader>
-                  <CardTitle className="text-primary">Criar uma Conta</CardTitle>
-                  <CardDescription>Digite seus dados para criar uma nova conta</CardDescription>
-                </CardHeader>
-                <form onSubmit={handleSignUp}>
-                  <CardContent className="space-y-4">
-                    {error && (
-                      <Alert variant="destructive">
-                        <AlertDescription>{error}</AlertDescription>
-                      </Alert>
-                    )}
-                    <div className="space-y-2">
-                      <Label htmlFor="signup-email">Email</Label>
-                      <Input
-                        id="signup-email"
-                        type="email"
-                        placeholder="nome@exemplo.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                        className="border-slate-200 focus:border-primary"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="signup-password">Senha</Label>
-                      <Input
-                        id="signup-password"
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                        className="border-slate-200 focus:border-primary"
-                      />
-                      <p className="text-xs text-slate-500">A senha deve ter pelo menos 6 caracteres</p>
-                    </div>
-                  </CardContent>
-                  <CardFooter>
-                    <AnimatedButton type="submit" className="w-full transition-all" disabled={isLoading}>
-                      {isLoading ? "Criando conta..." : "Criar Conta"}
-                    </AnimatedButton>
-                  </CardFooter>
-                </form>
-              </Card>
-            </TabsContent>
-          </Tabs>
+                <Button 
+                  type="submit" 
+                  className="w-full" 
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Entrando..." : "Entrar"}
+                </Button>
+              </form>
+            </Form>
+          </div>
         </div>
 
-        <div className="mt-4">
-          <Button variant="link" asChild className="text-primary">
-            <Link href="/">Voltar para a Página Inicial</Link>
-          </Button>
+      
+        <div className="hidden bg-primary md:block md:w-1/2">
+          <div className="relative h-full w-full">
+            <div className="absolute inset-0 bg-black/20 z-10"></div>
+            <img
+              src="/teste2.jpg"
+              alt="Carro esportivo"
+              className="h-full w-full object-cover"
+            />
+            
+          </div>
         </div>
       </div>
     </PageTransition>
   )
 }
-

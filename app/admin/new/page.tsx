@@ -195,9 +195,9 @@ export default function NewPostPage() {
             </form>
           </Card>
         </div>
+      </div>
 
         <Footer/>
-      </div>
      
     </AdminCheck>
   )

@@ -55,7 +55,7 @@ Ao baixar as dependências preencha o .ENV do projeto
 
 Para fazer login com ADM, utilize:
 ```bash
-    admin@admim.com 
+    admin@admin.com 
     fatec#Baitz123
 
  ```

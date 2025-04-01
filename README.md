@@ -53,6 +53,12 @@ Ao baixar as dependências preencha o .ENV do projeto
     http://localhost:3000
  ```
 
+Para fazer login com ADM, utilize:
+```bash
+    admin@admim.com 
+    fatec#Baitz123
+
+ ```
 
 
 

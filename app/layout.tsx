@@ -10,6 +10,9 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "Blog de Carros",
   description: "Um blog sobre carros e a indústria automotiva",
+  icons: {
+    icon: "/favicon.png", 
+  },
     
 }
 

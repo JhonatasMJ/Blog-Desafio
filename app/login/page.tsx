@@ -45,7 +45,7 @@ export default function LoginPage() {
     },
   })
 
-  // If user is already logged in, redirect to home
+  
   if (user) {
     router.push("/")
     return null
@@ -68,7 +68,6 @@ export default function LoginPage() {
   return (
     <PageTransition>
       <div className="flex min-h-screen flex-col md:flex-row">
-        {/* Form Side */}
         <div className="flex w-full flex-col justify-center px-4 py-12 md:w-1/2 md:px-12 lg:px-16 xl:px-24">
           <div className="mx-auto w-full max-w-md">
             <div className="flex items-center gap-2 mb-8">

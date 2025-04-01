@@ -47,7 +47,7 @@ export default function RegisterPage() {
     },
   })
 
-  // If user is already logged in, redirect to home
+
   if (user) {
     router.push("/")
     return null

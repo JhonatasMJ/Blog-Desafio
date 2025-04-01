@@ -228,8 +228,8 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
           </Card>
         </div>
 
-                  <Footer />
       </div>
+                  <Footer />
     </AdminCheck>
   )
 }

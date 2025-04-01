@@ -25,7 +25,15 @@ import { AnimatedCard } from "@/components/ui/animated-card"
 import { PageTransition } from "@/components/ui/page-transition"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
-import type { Post } from "../types/AdminTypes"
+
+
+export interface Post {
+  id: string;
+  title: string;
+  category: string;
+  date: string;
+  imageUrl: string;
+}
 
 export default function AdminPage() {
   const [posts, setPosts] = useState<Post[]>([])

@@ -24,7 +24,7 @@ import { useAuth } from "./auth-provider"
 export default function Header() {
   const { user, signOut, isAdmin } = useAuth()
 
-  // Função para obter as iniciais do usuário
+
   const getUserInitials = () => {
     if (!user?.email) return "U"
     const parts = user.email.split("@")[0].split(/[._-]/)

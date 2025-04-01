@@ -77,7 +77,7 @@ export default function ArticlePage({ params }: { params: { id: string } }) {
       <Header/>
       <div className="flex min-h-screen flex-col max-w-7xl mx-auto">
 
-        {/* Back Button */}
+
         <div className="container mt-8">
           <AnimatedButton
             variant="ghost"
@@ -92,7 +92,7 @@ export default function ArticlePage({ params }: { params: { id: string } }) {
           </AnimatedButton>
         </div>
 
-        {/* Article Header */}
+     
         <div className="container mt-8 max-w-4xl">
           <Badge variant="secondary" className="mb-4 bg-primary/10 text-primary hover:bg-primary/20">
             {post.category}
@@ -121,7 +121,6 @@ export default function ArticlePage({ params }: { params: { id: string } }) {
           </div>
         </div>
 
-        {/* Featured Image */}
         <div className="container mt-8 max-w-4xl">
           <div className="aspect-video w-full overflow-hidden rounded-lg shadow-md">
             <img
@@ -132,7 +131,7 @@ export default function ArticlePage({ params }: { params: { id: string } }) {
           </div>
         </div>
 
-        {/* Article Content */}
+       
         <div className="container mt-8 max-w-3xl">
           <div className="prose prose-lg max-w-none text-slate-700">
             {post.content.split("\n").map((paragraph, index) => (

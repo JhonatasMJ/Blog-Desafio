@@ -15,6 +15,8 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import Header from "@/components/header"
+import Footer from "@/components/footer"
 
 export default function NewPostPage() {
   const [title, setTitle] = useState("")
@@ -76,16 +78,9 @@ export default function NewPostPage() {
 
   return (
     <AdminCheck>
-      <div className="flex min-h-screen flex-col bg-white">
+      <Header/>
+      <div className="flex min-h-screen flex-col bg-white max-w-7xl mx-auto">
         {/* Header */}
-        <header className="sticky top-0 z-50 w-full border-b bg-white shadow-sm">
-          <div className="container flex h-16 items-center justify-between">
-            <Link href="/" className="flex items-center gap-2 font-bold text-xl text-primary">
-              <Car className="h-6 w-6" />
-              <span>Blog de Carros</span>
-            </Link>
-          </div>
-        </header>
 
         {/* Back Button */}
         <div className="container mt-8">
@@ -98,8 +93,8 @@ export default function NewPostPage() {
         </div>
 
         {/* New Post Form */}
-        <div className="container py-8 max-w-3xl">
-          <Card className="border border-slate-200 shadow-sm">
+        <div className="container py-8 p max-w-3xl mx-au ">
+          <Card className="border border-slate-200 shadow-sm p-6 justify-center">
             <CardHeader>
               <CardTitle className="text-primary">Criar Novo Post</CardTitle>
             </CardHeader>
@@ -201,21 +196,9 @@ export default function NewPostPage() {
           </Card>
         </div>
 
-        {/* Footer */}
-        <footer className="w-full border-t bg-slate-50 py-6 md:py-12 mt-auto">
-          <div className="container px-4 md:px-6">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-              <div className="flex items-center gap-2">
-                <Car className="h-6 w-6 text-primary" />
-                <span className="font-bold text-primary">Blog de Carros</span>
-              </div>
-              <p className="text-sm text-slate-500 text-center md:text-right">
-                © {new Date().getFullYear()} Blog de Carros. Todos os direitos reservados.
-              </p>
-            </div>
-          </div>
-        </footer>
+        <Footer/>
       </div>
+     
     </AdminCheck>
   )
 }

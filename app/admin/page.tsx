@@ -23,6 +23,8 @@ import {
 import { AnimatedButton } from "@/components/ui/animated-button"
 import { AnimatedCard } from "@/components/ui/animated-card"
 import { PageTransition } from "@/components/ui/page-transition"
+import Header from "@/components/header"
+import Footer from "@/components/footer"
 
 interface Post {
   id: string
@@ -76,28 +78,10 @@ export default function AdminPage() {
       <PageTransition>
         <div className="flex min-h-screen flex-col bg-white">
           {/* Header */}
-          <header className="sticky top-0 z-50 w-full border-b bg-white shadow-sm">
-            <div className="container flex h-16 items-center justify-between">
-              <Link href="/" className="flex items-center gap-2 font-bold text-xl text-primary">
-                <Car className="h-6 w-6" />
-                <span>Blog de Carros</span>
-              </Link>
-              <AnimatedButton
-                asChild
-                variant="outline"
-                size="sm"
-                className="transition-all hover:bg-primary hover:text-white"
-              >
-                <Link href="/admin/new">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Novo Post
-                </Link>
-              </AnimatedButton>
-            </div>
-          </header>
+         <Header/>
 
           {/* Back Button */}
-          <div className="container mt-8">
+          <div className="container mt-8 mx-auto max-w-7xl">
             <AnimatedButton
               variant="ghost"
               size="sm"
@@ -111,8 +95,8 @@ export default function AdminPage() {
             </AnimatedButton>
           </div>
 
-          {/* Admin Dashboard */}
-          <div className="container py-8">
+       
+          <div className="container py-8 max-w-7xl px-4 md:px-6 mx-auto ">
             <h1 className="text-3xl font-bold tracking-tighter text-primary">Gerenciar Posts</h1>
             <p className="text-slate-600">Crie, edite e exclua posts do blog</p>
 
@@ -139,20 +123,20 @@ export default function AdminPage() {
                 {posts.map((post, index) => (
                   <AnimatedCard key={post.id} delay={index} className="border border-slate-200 overflow-hidden">
                     <div className="flex flex-col md:flex-row">
-                      <div className="w-full md:w-48 h-48 overflow-hidden">
+                      <div className="w-full flex md:w-48 h-48 overflow-hidden ">
                         <img
                           src={post.imageUrl || "/placeholder.svg?height=200&width=200"}
                           alt={post.title}
                           className="h-full w-full object-cover transition-transform hover:scale-[1.02] duration-300"
                         />
                       </div>
-                      <div className="flex flex-col flex-1">
+                      <div className="flex flex-col flex-1 p-4 ">
+                            <span className="text-sm text-slate-500">{post.date}</span>
                         <CardHeader>
                           <div className="flex items-center gap-2 mb-2">
                             <Badge variant="secondary" className="bg-primary/10 text-primary hover:bg-primary/20">
                               {post.category}
                             </Badge>
-                            <span className="text-sm text-slate-500">{post.date}</span>
                           </div>
                           <CardTitle className="text-primary">{post.title}</CardTitle>
                         </CardHeader>
@@ -203,19 +187,7 @@ export default function AdminPage() {
           </div>
 
           {/* Footer */}
-          <footer className="w-full border-t bg-slate-50 py-6 md:py-12 mt-auto">
-            <div className="container px-4 md:px-6">
-              <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-                <div className="flex items-center gap-2">
-                  <Car className="h-6 w-6 text-primary" />
-                  <span className="font-bold text-primary">Blog de Carros</span>
-                </div>
-                <p className="text-sm text-slate-500 text-center md:text-right">
-                  © {new Date().getFullYear()} Blog de Carros. Todos os direitos reservados.
-                </p>
-              </div>
-            </div>
-          </footer>
+       <Footer/>
         </div>
       </PageTransition>
     </AdminCheck>

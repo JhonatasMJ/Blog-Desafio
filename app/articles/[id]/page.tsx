@@ -11,6 +11,8 @@ import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { AnimatedButton } from "@/components/ui/animated-button"
 import { PageTransition } from "@/components/ui/page-transition"
+import Header from "@/components/header"
+import Footer from "@/components/footer"
 
 interface Post {
   id: string
@@ -71,34 +73,9 @@ export default function ArticlePage({ params }: { params: { id: string } }) {
 
   return (
     <PageTransition>
-      <div className="flex min-h-screen flex-col bg-red-500">
-        {/* Header */}
-        <header className="sticky top-0 z-50 w-full border-b bg-white shadow-sm">
-          <div className="container flex h-16 items-center justify-between">
-            <Link href="/" className="flex items-center gap-2 font-bold text-xl text-primary">
-              <Car className="h-6 w-6" />
-              <span>Blog de Carros</span>
-            </Link>
-            <div className="flex items-center gap-4">
-              {user ? (
-                <>
-                  <span className="text-sm text-slate-500 hidden md:inline">{user.email}</span>
-                  <AnimatedButton onClick={() => signOut()} size="sm" className="transition-all">
-                    <LogOut className="h-4 w-4 mr-2" />
-                    Sair
-                  </AnimatedButton>
-                </>
-              ) : (
-                <AnimatedButton asChild size="sm" className="transition-all">
-                  <Link href="/login">
-                    <LogIn className="h-4 w-4 mr-2" />
-                    Entrar
-                  </Link>
-                </AnimatedButton>
-              )}
-            </div>
-          </div>
-        </header>
+ 
+      <Header/>
+      <div className="flex min-h-screen flex-col max-w-7xl mx-auto">
 
         {/* Back Button */}
         <div className="container mt-8">
@@ -166,21 +143,9 @@ export default function ArticlePage({ params }: { params: { id: string } }) {
 
         <Separator className="my-12" />
 
-        {/* Footer */}
-        <footer className="w-full border-t bg-slate-50 py-6 md:py-12 mt-auto">
-          <div className="container px-4 md:px-6">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-              <div className="flex items-center gap-2">
-                <Car className="h-6 w-6 text-primary" />
-                <span className="font-bold text-primary">Blog de Carros</span>
-              </div>
-              <p className="text-sm text-slate-500 text-center md:text-right">
-                © {new Date().getFullYear()} Blog de Carros. Todos os direitos reservados.
-              </p>
-            </div>
-          </div>
-        </footer>
+       <Footer/>
       </div>
+       
     </PageTransition>
   )
 }
